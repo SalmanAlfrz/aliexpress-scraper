@@ -265,7 +265,7 @@ async def scrape(target_url: str) -> dict:
         page = await _browser.get(target_url)
         await asyncio.sleep(random.uniform(4, 6))
 
-    # await _wait_for_csr(page, timeout=30)
+    await _wait_for_csr(page, timeout=30)
     load_ms = int((time.time() - t) * 1000)
 
     # await page.scroll_down(200)
