@@ -159,9 +159,14 @@ async def init_browser():
     ]
     if NO_SANDBOX:
         browser_args.append("--no-sandbox")
+    if HEADLESS:
+        # Chrome extensions don't work with --headless.
+        # Use headless=new with virtual display (Xvfb) instead,
+        # or fall back to --headless=new which supports extensions since Chrome 133+.
+        browser_args.append("--headless=new")
 
     config_kwargs = dict(
-        headless=HEADLESS,
+        headless=False,  # We handle headless via browser_args to keep extension support
         sandbox=not NO_SANDBOX,
         user_data_dir=str(USER_DATA_DIR),
         browser_args=browser_args,
@@ -199,6 +204,8 @@ async def close_browser():
         pass
     _browser = None
     _proxy_info = None
+    # Give OS time to release process/file handles
+    await asyncio.sleep(2)
 
 
 async def reset_browser():
@@ -207,7 +214,10 @@ async def reset_browser():
     await close_browser()
     if USER_DATA_DIR.exists():
         shutil.rmtree(USER_DATA_DIR, ignore_errors=True)
+        log("RESET", "Profile wiped")
+    # Force re-init (bypass the _browser check)
     await init_browser()
+    log("RESET", f"Browser restarted | proxy: {_proxy_info.get('ip', '?') if _proxy_info else '?'}")
 
 
 # ── Page Helpers ──────────────────────────────────────────────────────────────
