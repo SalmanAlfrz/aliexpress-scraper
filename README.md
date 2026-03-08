@@ -35,6 +35,8 @@ CHROMIUM_PATH=
 | `PROXY_USERNAME` | Proxy username | *(required)* |
 | `PROXY_PASSWORD` | Proxy password | *(required)* |
 | `CHROMIUM_PATH` | Custom Chromium/Chrome binary path. Leave empty for auto-detect | *(empty)* |
+| `HEADLESS` | Run browser without GUI (for VPS/server) | `false` |
+| `NO_SANDBOX` | Disable Chrome sandbox (required on VPS/root) | `false` |
 
 ### Custom Chromium Path
 

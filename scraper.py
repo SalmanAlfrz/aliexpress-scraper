@@ -21,6 +21,8 @@ PROXY_PORT = int(os.getenv("PROXY_PORT", "0"))
 PROXY_USERNAME = os.getenv("PROXY_USERNAME", "")
 PROXY_PASSWORD = os.getenv("PROXY_PASSWORD", "")
 CHROMIUM_PATH = os.getenv("CHROMIUM_PATH", "")
+HEADLESS = os.getenv("HEADLESS", "false").lower() in ("true", "1", "yes")
+NO_SANDBOX = os.getenv("NO_SANDBOX", "false").lower() in ("true", "1", "yes")
 
 USER_DATA_DIR = Path.home() / ".aliexpress-zd-profile"
 
@@ -150,14 +152,19 @@ async def init_browser():
     ext_dir = _create_proxy_extension(proxy)
     log("INIT", f"Proxy {proxy['host']}:{proxy['port']} | {proxy['user']}")
 
+    browser_args = [
+        f"--load-extension={ext_dir}",
+        "--accept-lang=pt-BR,pt,en-US,en",
+        "--window-size=1920,1080",
+    ]
+    if NO_SANDBOX:
+        browser_args.append("--no-sandbox")
+
     config_kwargs = dict(
-        headless=False,
+        headless=HEADLESS,
+        sandbox=not NO_SANDBOX,
         user_data_dir=str(USER_DATA_DIR),
-        browser_args=[
-            f"--load-extension={ext_dir}",
-            "--accept-lang=pt-BR,pt,en-US,en",
-            "--window-size=1920,1080",
-        ],
+        browser_args=browser_args,
     )
     if CHROMIUM_PATH:
         config_kwargs["browser_executable_path"] = CHROMIUM_PATH
