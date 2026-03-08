@@ -18,9 +18,8 @@ load_dotenv()
 
 PROXY_HOST = os.getenv("PROXY_HOST", "")
 PROXY_PORT = int(os.getenv("PROXY_PORT", "0"))
+PROXY_USERNAME = os.getenv("PROXY_USERNAME", "")
 PROXY_PASSWORD = os.getenv("PROXY_PASSWORD", "")
-PROXY_COUNTRY = os.getenv("PROXY_COUNTRY", "br")
-PROXY_USERNAME_PREFIX = os.getenv("PROXY_USERNAME_PREFIX", "mrscraper-rc")
 CHROMIUM_PATH = os.getenv("CHROMIUM_PATH", "")
 
 USER_DATA_DIR = Path.home() / ".aliexpress-zd-profile"
@@ -76,11 +75,10 @@ def log(tag: str, msg: str):
 
 
 def _build_proxy() -> dict:
-    session_id = "".join(random.choices("0123456789", k=9))
     return {
         "host": PROXY_HOST,
         "port": PROXY_PORT,
-        "user": f"{PROXY_USERNAME_PREFIX}_{PROXY_COUNTRY}-{session_id}",
+        "user": PROXY_USERNAME,
         "pass": PROXY_PASSWORD,
     }
 

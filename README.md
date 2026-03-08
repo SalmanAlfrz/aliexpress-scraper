@@ -19,11 +19,10 @@ Create a `.env` file in the project root:
 
 ```env
 # Proxy
-PROXY_HOST=vip.proxy4ai.io
-PROXY_PORT=7383
+PROXY_HOST=proxy.example.com
+PROXY_PORT=10000
+PROXY_USERNAME=your_username
 PROXY_PASSWORD=your_password
-PROXY_COUNTRY=br
-PROXY_USERNAME_PREFIX=mrscraper-rc
 
 # Chromium path (leave empty to auto-detect)
 CHROMIUM_PATH=
@@ -33,9 +32,8 @@ CHROMIUM_PATH=
 |----------|-------------|---------|
 | `PROXY_HOST` | Proxy server hostname | *(required)* |
 | `PROXY_PORT` | Proxy server port | *(required)* |
+| `PROXY_USERNAME` | Proxy username | *(required)* |
 | `PROXY_PASSWORD` | Proxy password | *(required)* |
-| `PROXY_COUNTRY` | Target country code for proxy routing | `br` |
-| `PROXY_USERNAME_PREFIX` | Username prefix (session ID appended automatically) | `mrscraper-rc` |
 | `CHROMIUM_PATH` | Custom Chromium/Chrome binary path. Leave empty for auto-detect | *(empty)* |
 
 ### Custom Chromium Path
@@ -122,7 +120,7 @@ curl http://localhost:3001/health
 
 The scraper strips 25+ automation-telltale Chrome flags that zendriver adds by default (e.g. `--disable-infobars`, `--no-first-run`, `--disable-dev-shm-usage`). This mimics a clean, user-installed Chrome and reduces CAPTCHA triggers.
 
-Proxy authentication is handled via a dynamically generated Chrome extension (Manifest V3) — each browser session gets a unique session ID for IP rotation.
+Proxy authentication is handled via a dynamically generated Chrome extension (Manifest V3).
 
 If CAPTCHA is detected, the browser automatically resets (wipes profile, new proxy session) and retries once.
 
