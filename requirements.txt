@@ -1,0 +1,5 @@
+zendriver
+fastapi[standard]
+uvicorn
+python-dotenv
+beautifulsoup4
